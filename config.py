@@ -16,11 +16,14 @@ PATH = os.getenv("PATH")
 LOG_FILE = os.getenv("LOG_FILE")
 
 # API Credentials
-MNOTIFY_API_KEY = os.getenv("MNOTIFY_API_KEY")
 MNOTIFY_API_URL = os.getenv("MNOTIFY_API_URL")
+MNOTIFY_API_KEY = os.getenv("MNOTIFY_API_KEY")
 
-# Concurrent Requests
-CONCURRENT_REQUESTS = int(os.getenv("CONCURRENT_REQUESTS", 20))
+# Batch size
+BATCH_SIZE = int(os.getenv("BATCH_SIZE", 10000))
+
+# Concurrency limit
+CONCURRENCY_LIMIT=int(os.getenv("CONCURRENCY_LIMIT", 100))
 
 # Database connection details
 driver = os.getenv("DB_DRIVER")
