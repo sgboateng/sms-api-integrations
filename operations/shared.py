@@ -10,7 +10,7 @@ warnings.filterwarnings("ignore")
 class SHAREDOperations():    
 
     # Create Contact list
-    def contact_list() -> pd.DataFrame:
+    def contact_list(self) -> pd.DataFrame:
 
         # Contacts list
         contacts = {

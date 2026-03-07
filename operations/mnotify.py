@@ -1,7 +1,7 @@
 # operations/mnotify.py
 # Import Libraries
-import pandas as pd
 import requests
+from typing import List
 
 # Import Warnings
 import warnings
@@ -19,11 +19,17 @@ from config import MNOTIFY_API_KEY, MNOTIFY_API_URL
 # Instantiate Operations
 shared_ops = SHAREDOperations()
 
+# Instantiate Utils
+msg_logger = Logger()
+
 
 class MNOTIFYOperations():
 
     # Mnotify API
-    def sms_sender(self) -> None:
+    def sms_api(self) -> List:
+
+        # Initialize an empty list
+        response_list = []
 
         # Get Contact list
         contacts = shared_ops.contact_list()
@@ -75,9 +81,12 @@ class MNOTIFYOperations():
                     verify=True  # Enforces certificate validation using system CA store
                 )
 
-                # Print messages
-                print(f"[{phone_number}] Status Code:", response.status_code)
-                print("Response:", response.text)
+                # Append JSON Response to list
+                response_list.append(response.text)
+
+                # Response messages                
+                response_message = f"PHONE NUMBER - {phone_number} | RESPONSE CODE - {response.status_code}"
+                msg_logger.log('INFO', response_message)
 
             except AttributeError as attr_err:
                 print("Missing data in row:", attr_err)
@@ -85,3 +94,5 @@ class MNOTIFYOperations():
                 print("SSL error:", ssl_err)
             except requests.exceptions.RequestException as req_err:
                 print("Error sending SMS:", req_err)
+
+        return response_list
