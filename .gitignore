@@ -1,4 +1,3 @@
 .env
 datasets/
-scripts/sms_api_integration.py
-scripts/smsnotification.py
+scripts/*
