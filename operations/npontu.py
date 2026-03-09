@@ -1,4 +1,4 @@
-# operations/mnotify.py
+# operations/npontu.py
 import asyncio
 import aiohttp
 
@@ -12,7 +12,7 @@ from operations.shared import SHAREDOperations
 from utils.logger import Logger
 
 # Import Configurations
-from config import MNOTIFY_API_URL, MNOTIFY_API_KEY, BATCH_SIZE, CONCURRENCY_LIMIT
+from config import NPONTU_USER_NAME, NPONTU_PASSSWORD, NPONTU_API_URL, BATCH_SIZE, CONCURRENCY_LIMIT
 
 # Instantiate Operations
 shared_ops = SHAREDOperations()
@@ -20,19 +20,21 @@ shared_ops = SHAREDOperations()
 # Instantiate Utils
 msg_logger = Logger()
 
-class MNOTIFYOperations:
+class NPONTUOperations:
 
     def __init__(self):
-        self.api_url = MNOTIFY_API_URL
-        self.api_key = MNOTIFY_API_KEY
+        self.api_user_name = NPONTU_USER_NAME
+        self.api_password = NPONTU_PASSSWORD
+        self.api_url = NPONTU_API_URL
         self.batch_size = BATCH_SIZE
         self.concurrency_limit = CONCURRENCY_LIMIT
         self.logger = msg_logger
         self.shared_ops = shared_ops
 
+        # Headers with API key (if required in headers)
         self.headers = {
-            "X-API-KEY": self.api_key,
-            "Content-Type": "application/json"
+            "Content-Type": "application/x-www-form-urlencoded",  # use this for form data
+            "Accept": "application/json"  # optional, if you expect JSON response
         }
 
     async def _send_sms(self, session, customer_name, phone_number, expiry_date):
@@ -43,22 +45,24 @@ class MNOTIFYOperations:
             f"Zenith Bank...in your best interest."
         )
 
+        # SMS PayLoad
         payload = {
-            "recipient": [str(phone_number)],
-            "sender": "ZENITHBANK",
-            "message": txt_message,
-            "is_schedule": False
+            "username": self.api_user_name,
+            "password": self.api_password,
+            "source": "ZENITHBANK",
+            "destination": phone_number,
+            "message": txt_message
         }
 
         async with session.post(
-            self.api_url + '?key=' + self.api_key,
-            json=payload,
-            headers=self.headers,
+            self.api_url, 
+            data=payload, 
+            headers=self.headers, 
             ssl=True
         ) as response:
             text = await response.text()
             self.logger.log('INFO',
-                f"API - Mnotify | PHONE NUMBER - {phone_number} | RESPONSE CODE - {response.status}"
+                f"API - Npontu | PHONE NUMBER - {phone_number} | RESPONSE CODE - {response.status}"
             )
             return text
 

@@ -15,9 +15,14 @@ PATH = os.getenv("PATH")
 # Log file
 LOG_FILE = os.getenv("LOG_FILE")
 
-# API Credentials
+# Mnotify API Credentials
 MNOTIFY_API_URL = os.getenv("MNOTIFY_API_URL")
 MNOTIFY_API_KEY = os.getenv("MNOTIFY_API_KEY")
+
+# Npontu API Credentials
+NPONTU_USER_NAME = os.getenv("NPONTU_USER_NAME")
+NPONTU_PASSSWORD = os.getenv("NPONTU_PASSSWORD")
+NPONTU_API_URL = os.getenv("NPONTU_API_URL")
 
 # Batch size
 BATCH_SIZE = int(os.getenv("BATCH_SIZE", 10000))
